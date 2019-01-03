@@ -7,6 +7,7 @@
 // [b3,b4,b5]
 // [b6,b7,b8]
 // check for winner
+//7-9 broken
 
 int checkplayer(int i, char * board){
   if(board[i] == 'X'){
@@ -15,8 +16,8 @@ int checkplayer(int i, char * board){
   else if(board[i] == 'O'){
     return 2;
   }
-
 }
+
 int checkwinner(char * board){
   if(board[0]==board[1] && board[1] == board[2]){
     return checkplayer(0,board);
@@ -113,7 +114,7 @@ int main(int argc, char *argv[]){
     }
     printf("\n");
     printboard(board);
-
+    //printf("%s \n",board);
     if(checkwinner(board) == 1 || checkwinner(board) == 2){
       winner = 0;
       printf("Winner: Player: %i!\n",checkwinner(board));
@@ -122,6 +123,7 @@ int main(int argc, char *argv[]){
       winner = 0;
       printf("Tie it up \n");
     }
+
   }
   return 0;
 }
