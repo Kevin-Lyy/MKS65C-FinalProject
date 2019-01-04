@@ -7,7 +7,7 @@
 // [b3,b4,b5]
 // [b6,b7,b8]
 // check for winner
-//7-9 broken
+//7-9 broken (6-8)
 
 int checkplayer(int i, char * board){
   if(board[i] == 'X'){
@@ -18,39 +18,59 @@ int checkplayer(int i, char * board){
   }
 }
 
+int checkboard(int x, int y, int z, char * board){
+  if(board[x] == board[y] && board[x] == board[z]){
+    return 1;
+  }
+  return 0;
+}
+
 int checkwinner(char * board){
-  if(board[0]==board[1] && board[1] == board[2]){
+
+
+  //row 1
+  if(checkboard(0,1,2,board)){
     return checkplayer(0,board);
-
   }
-  if(board[0]==board[4] && board[4] == board[8]){
-    return checkplayer(0,board);
 
-  }
-  if(board[0]==board[3] && board[3] == board[6]){
-    return checkplayer(0,board);
-
-  }
-  if(board[1]==board[4] && board[4] == board[7]){
-    return checkplayer(1,board);
-
-  }
-  if(board[2]==board[5] && board[5] == board[8]){
-    return checkplayer(2,board);
-
-  }
-  if(board[3]==board[4] && board[4] == board[5]){
+  //row 2
+  if(checkboard(3,4,5,board)){
     return checkplayer(3,board);
-
   }
-  if(board[6]==board[7] && board[7] == board[8]){
+
+  //row 3
+  if(checkboard(6,7,8,board)){
+    return checkplayer(7,board);
+  }
+
+
+
+  //column 1
+  if(checkboard(0,3,6,board)){
+    return checkplayer(0,board);
+  }
+
+  //column 2
+  if(checkboard(1,4,7,board)){
+    return checkplayer(1,board);
+  }
+
+  //column 3
+  if(checkboard(2,5,8,board)){
+    return checkplayer(2,board);
+  }
+
+  //diagonal left
+  if(checkboard(0,4,8,board)){
+    return checkplayer(0,board);
+  }
+
+  //diagonal right
+  if(checkboard(2,4,6,board)){
     return checkplayer(6,board);
 
   }
-  if(board[6]==board[4] && board[4] == board[2]){
-    return checkplayer(6,board);
 
-  }
   int c = 0;
   int counter = 0;
   for(;c < 9;c++){
