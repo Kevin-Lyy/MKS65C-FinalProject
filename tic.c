@@ -43,8 +43,6 @@ int checkwinner(char * board){
     return checkplayer(7,board);
   }
 
-
-
   //column 1
   if(checkboard(0,3,6,board)){
     return checkplayer(0,board);
