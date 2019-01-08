@@ -7,7 +7,6 @@
 // [b3,b4,b5]
 // [b6,b7,b8]
 // check for winner
-//7-9 broken (6-8)
 
 int checkplayer(int i, char * board){
   if(board[i] == 'X'){
@@ -27,43 +26,37 @@ int checkboard(int x, int y, int z, char * board){
 
 int checkwinner(char * board){
 
-
-  //row 1
+  //row 1- works
   if(checkboard(0,1,2,board)){
     return checkplayer(0,board);
   }
 
-  //row 2
+  //row 2- works
   if(checkboard(3,4,5,board)){
     return checkplayer(3,board);
   }
 
-  //row 3
-  if(checkboard(6,7,8,board)){
-    return checkplayer(7,board);
-  }
-
-  //column 1
+  //column 1- works
   if(checkboard(0,3,6,board)){
     return checkplayer(0,board);
   }
 
-  //column 2
+  //column 2- works
   if(checkboard(1,4,7,board)){
     return checkplayer(1,board);
   }
 
-  //column 3
+  //column 3- works
   if(checkboard(2,5,8,board)){
     return checkplayer(2,board);
   }
 
-  //diagonal left
+  //diagonal left- works
   if(checkboard(0,4,8,board)){
     return checkplayer(0,board);
   }
 
-  //diagonal right
+  //diagonal right- works
   if(checkboard(2,4,6,board)){
     return checkplayer(6,board);
 
@@ -81,6 +74,12 @@ int checkwinner(char * board){
   }
 
   return 0;
+}
+int lastwinner(char * board){
+  //row 3- works
+  if(checkboard(6,7,8,board)){
+    return checkplayer(6,board);
+  }
 }
 
 void printboard(char * board){
@@ -133,6 +132,10 @@ int main(int argc, char *argv[]){
     printf("\n");
     printboard(board);
     //printf("%s \n",board);
+    if(lastwinner(board)== 1 || lastwinner(board)==2){
+      winner = 0;
+      printf("Winner: Player: %i!\n",lastwinner(board));
+    }
     if(checkwinner(board) == 1 || checkwinner(board) == 2){
       winner = 0;
       printf("Winner: Player: %i!\n",checkwinner(board));
