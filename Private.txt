@@ -1,6 +1,4 @@
-Test1
+Passwords
 testpass1
-Test2
 testpass2
-Test3
 testpass3

@@ -1,12 +1,24 @@
-all: tic.o
-	gcc -o hello tic.o
+all: tic login
 
-tic.o:tic.c
+tic: tic.o
+	gcc -o tic tic.o
+
+login: login.o
+	gcc -o login login.o
+
+tic.o: tic.c
 	gcc -c tic.c
 
-run:
-	./hello
+login.o: login.c
+	gcc -c login.c
 
-clear:
+run:
+	./tic
+
+fun:
+	./login
+
+clean:
 	rm *.o
-	rm *out
+	rm tic
+	rm login
