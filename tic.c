@@ -32,45 +32,47 @@ int checkwinner(char * board){
   }
 
   //row 2- works
-  if(checkboard(3,4,5,board)){
+  else if(checkboard(3,4,5,board)){
     return checkplayer(3,board);
   }
 
   //column 1- works
-  if(checkboard(0,3,6,board)){
+  else if(checkboard(0,3,6,board)){
     return checkplayer(0,board);
   }
 
   //column 2- works
-  if(checkboard(1,4,7,board)){
+  else if(checkboard(1,4,7,board)){
     return checkplayer(1,board);
   }
 
   //column 3- works
-  if(checkboard(2,5,8,board)){
+  else if(checkboard(2,5,8,board)){
     return checkplayer(2,board);
   }
 
   //diagonal left- works
-  if(checkboard(0,4,8,board)){
+  else if(checkboard(0,4,8,board)){
     return checkplayer(0,board);
   }
 
   //diagonal right- works
-  if(checkboard(2,4,6,board)){
+  else if(checkboard(2,4,6,board)){
     return checkplayer(6,board);
 
   }
 
-  int c = 0;
-  int counter = 0;
-  for(;c < 9;c++){
-    if(board[c] != '-'){
-      counter++;
+  else{
+    int c = 0;
+    int counter = 0;
+    for(;c < 9;c++){
+      if(board[c] != '-'){
+        counter++;
+      }
     }
-  }
-  if(counter == 9){
-    return 3;
+    if(counter == 9){
+      return 3;
+    }
   }
 
   return 0;
@@ -140,7 +142,7 @@ int main(int argc, char *argv[]){
       winner = 0;
       printf("Winner: Player: %i!\n",checkwinner(board));
     }
-    if(checkwinner(board) == 3){
+    else if(checkwinner(board) == 3){
       winner = 0;
       printf("Tie it up \n");
     }
