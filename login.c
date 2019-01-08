@@ -40,10 +40,19 @@ int main(int argc, char *argv[]){
       printf("Pick an opponent: \n");
 
       char * line = (char*)malloc(100*sizeof(char));
+      char checkline[1000];
       FILE *file;
       file = fopen("User.txt","r");
+      FILE *file2;
+      file2 = fopen("User.txt","r");
+
+      int linenumbers = 0;
+      while(fgets(checkline, sizeof(checkline), file2) != NULL){
+         linenumbers++;
+       }
+       
       int i = 0;
-      for(;i< 9;i++){
+      for(;i< linenumbers;i++){
         fgets(line,sizeof(line),file);
         printf("%s",line);
         i++;
