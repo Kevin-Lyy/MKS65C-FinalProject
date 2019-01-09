@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
         }
       }
       fclose(file);
-
+      //Creates a new ueser
       if(userid == 0 && i == numoflines("Usernames.txt")){
         printf("Username does not exist \n");
         printf("Creating new user: %s \n",input);
@@ -65,7 +65,8 @@ int main(int argc, char *argv[]){
       printf("Password?\n");
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
-      
+
+      //Sets password for new user
       if(userid > numoflines("Private.txt")){
         printf("new user!");
         step++;
@@ -86,7 +87,7 @@ int main(int argc, char *argv[]){
             if(strcmp(pass,input) == 0){
               printf("correct");
               step++;
-              linenum++;
+              //linenum++;
             }
           }
           else{
@@ -99,25 +100,19 @@ int main(int argc, char *argv[]){
     }
 
 
-
     if(step == 3){
       printf("\nLogin success! \n \n");
       printf("Pick an opponent: \n");
 
-      char * users = (char*)malloc(100*sizeof(char));
+      char users[10000], line;
       FILE *userfile;
       userfile = fopen("User.txt","r");
 
-      int b = 0;
-      for(;b< numoflines("User.txt");b++){
-        fgets(users,sizeof(users),userfile);
-        printf("%s",users);
-        b++;
-        if(b % 3  == 0 ){
-          printf("\n");
-        }
-        b--;
+      while(line != EOF){
+        printf("%c",line);
+        line = fgetc(userfile);
       }
+
 
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
