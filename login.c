@@ -26,8 +26,7 @@ int main(int argc, char *argv[]){
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
 
-      //char * line = (char*)malloc(100*sizeof(char));
-      char * line;
+      char * line = (char*)malloc(100*sizeof(char));
       size_t len = 0;
       FILE *file;
       file = fopen("Usernames.txt","r");
@@ -41,20 +40,24 @@ int main(int argc, char *argv[]){
           }
         }
         strtok(line, "\n");
-        // printf("[]%s[]\n",input);
-        // printf("[]%s[]\n",line);
         if(strcmp(input,line) == 0){
           userid = i;
           step++;
 
         }
       }
+      fclose(file);
+
       if(userid == 0 && i == numoflines("Usernames.txt")){
         printf("Username does not exist \n");
         printf("Creating new user: %s \n",input);
+        userid = numoflines("Usernames.txt") + 1;
+        file = fopen("Usernames.txt","a");
+        fprintf(file,"%s",input);
         step++;
       }
       fclose(file);
+
     }
 
     //userid
@@ -62,25 +65,37 @@ int main(int argc, char *argv[]){
       printf("Password?\n");
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
+      
+      if(userid > numoflines("Private.txt")){
+        printf("new user!");
+        step++;
+        FILE *filepass;
+        filepass = fopen("Private.txt","a");
+        fprintf(filepass,"%s",input);
+        fclose(filepass);
+      }
 
-      char pass[100];
-      FILE *filepass;
-      filepass = fopen("Private.txt","r");
-      int linenum = 0;
-      while(fgets(pass,100,filepass) != NULL){
-        if(linenum == userid){
-          strtok(pass, "\n");
-          printf("%s\n",input);
-          printf("%s\n",pass);
-          if(strcmp(pass,input) == 0){
-            printf("correct");
-            step++;
+      else{
+        char pass[100];
+        FILE *filepass;
+        filepass = fopen("Private.txt","r");
+        int linenum = 0;
+        while(fgets(pass,100,filepass) != NULL){
+          if(linenum == userid){
+            strtok(pass, "\n");
+            if(strcmp(pass,input) == 0){
+              printf("correct");
+              step++;
+              linenum++;
+            }
+          }
+          else{
+            linenum++;
           }
         }
-        else{
-          linenum++;
-        }
+        fclose(filepass);
       }
+
     }
 
 
@@ -89,27 +104,27 @@ int main(int argc, char *argv[]){
       printf("\nLogin success! \n \n");
       printf("Pick an opponent: \n");
 
-      char * line = (char*)malloc(100*sizeof(char));
-      FILE *file;
-      file = fopen("User.txt","r");
+      char * users = (char*)malloc(100*sizeof(char));
+      FILE *userfile;
+      userfile = fopen("User.txt","r");
 
-      int i = 0;
-      for(;i< numoflines("User.txt");i++){
-        fgets(line,sizeof(line),file);
-        printf("%s",line);
-        i++;
-        if(i % 3  == 0 ){
+      int b = 0;
+      for(;b< numoflines("User.txt");b++){
+        fgets(users,sizeof(users),userfile);
+        printf("%s",users);
+        b++;
+        if(b % 3  == 0 ){
           printf("\n");
         }
-        i--;
+        b--;
       }
 
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
 
 
-      loop--;
-      fclose(file);
+      loop = 0;
+      fclose(userfile);
     }
     //User
     //Wins
