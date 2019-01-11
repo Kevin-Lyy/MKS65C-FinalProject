@@ -86,19 +86,12 @@ int main(int argc, char *argv[]){
         fgets(inputpass,100,stdin);
         inputpass[strlen(inputpass)-1] = '\0';
 
-        //looooooooooop
         char * pass = (char*)malloc(100*sizeof(char));;
         FILE *filepass;
         size_t len = 0;
         filepass = fopen("Private.txt","r");
         int linenum = 0;
         int c = 0;
-
-
-        // if(strcmp(inputpass,"test") == 0){
-        //   printf("Correct");
-        // }
-        // step++;
 
         for(;c< users;c++){
           getline(&pass,&len,filepass);
@@ -115,34 +108,6 @@ int main(int argc, char *argv[]){
 
         fclose(filepass);
         free(pass);
-
-
-        //looooooooooop
-        // char * pass = (char*)malloc(100*sizeof(char));
-        // FILE *filepass;
-        // size_t len = 0;
-        // filepass = fopen("Private.txt","r");
-        // int linenum = 0;
-        // int c = 0;
-        // while(fgets(pass,100,filepass) != NULL){
-        //   if(linenum == userid){
-        //     strtok(pass, "\n");
-        //     printf("%s\n",input);
-        //     printf("%s\n",pass);
-        //
-        //     if(strcmp(pass,input) == 0){
-        //       printf("correct\n");
-        //       step++;
-        //     }
-        //   }
-        //
-        //   else{
-        //     linenum++;
-        //   }
-        // }
-        //
-        // fclose(filepass);
-        // free(pass);
 
       }
     }
@@ -168,12 +133,13 @@ int main(int argc, char *argv[]){
         i--;
       }
 
+
       char * input = (char*)malloc(100*sizeof(char));
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
 
       if(strcmp(input,"test")){
-        break;
+        exit(0);
       }
 
       fclose(userfile);
@@ -181,7 +147,6 @@ int main(int argc, char *argv[]){
       free(users);
 
     }
-
 
     //User
     //Wins
