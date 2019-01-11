@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
         printf("Creating new user: %s \n",input);
         userid = numoflines("Usernames.txt") + 1;
         file = fopen("Usernames.txt","a");
-        fprintf(file,"%s",input);
+        fprintf(file,"%s\n",input);
         fclose(file);
         file = fopen("User.txt","a");
         fprintf(file,"%s\n0\n0\n",input);
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]){
         inputpass[strlen(inputpass)-1] = '\0';
         FILE *filepass;
         filepass = fopen("Private.txt","a");
-        fprintf(filepass,"%s",inputpass);
+        fprintf(filepass,"%s\n",inputpass);
         fclose(filepass);
         step++;
       }
@@ -90,25 +90,28 @@ int main(int argc, char *argv[]){
         FILE *filepass;
         size_t len = 0;
         filepass = fopen("Private.txt","r");
-        int linenum = 0;
         int c = 0;
 
-        for(;c< users;c++){
+        for(;c < users;c++){
           getline(&pass,&len,filepass);
           strtok(pass, "\n");
-          if(linenum == userid){
+          // printf("%s\n",pass);
+          // printf("%i\n",c);
+          // printf("%i\n",userid);
+          if(c == userid){
             if(strcmp(inputpass,pass) == 0){
               step++;
+              printf("\nLogin success! \n \n");
             }
           }
-          else{
-            linenum++;
-          }
+          // else{
+          //   linenum++;
+          // }
         }
 
         fclose(filepass);
         free(pass);
-        printf("\nLogin success! \n \n");
+
 
       }
     }
@@ -158,7 +161,6 @@ int main(int argc, char *argv[]){
       free(line2);
 
       if(strcmp(input,"end") == 0){
-        //exit(0);
         loop--;
       }
 
