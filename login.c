@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
     //userid
     if(step == 2){
       printf("\nPassword?\n");
-      printf("User ID: %i\n",userid);
+      //printf("User ID: %i\n",userid);
       char * inputpass = (char*)malloc(100*sizeof(char));
 
       //Sets password for new user
@@ -108,43 +108,61 @@ int main(int argc, char *argv[]){
 
         fclose(filepass);
         free(pass);
+        printf("\nLogin success! \n \n");
 
       }
     }
 
 
     if(step == 3){
-      printf("\nLogin success! \n \n");
       printf("Pick an opponent:\n");
 
-      char * users = (char*)malloc(10000*sizeof(char));
+      char * username = (char*)malloc(10000*sizeof(char));
       size_t len = 0;
       FILE *userfile;
       userfile = fopen("User.txt","r");
       int i = 0;
       for(;i< usertxt;i++){
-        getline(&users,&len,userfile);
-        strtok(users, "\n");
-        printf("%s\n",users);
+        getline(&username,&len,userfile);
+        strtok(username, "\n");
+        printf("%s\n",username);
         i++;
         if(i % 3 == 0){
           printf("\n");
         }
         i--;
       }
-
+      fclose(userfile);
+      free(username);
 
       char * input = (char*)malloc(100*sizeof(char));
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
 
-      if(strcmp(input,"test")){
-        exit(0);
+      char * line2 = (char*)malloc(100*sizeof(char));
+      size_t len2 = 0;
+      FILE *file2;
+      file2 = fopen("Usernames.txt","r");
+      int c = 0;
+      for(;c< users;c++){
+        getline(&line2,&len2,file2);
+        strtok(line2, "\n");
+        if(strcmp(input,line2) == 0){
+          if(userid == c){
+            printf("\nYou cant pick you\n \n");
+          }
+
+        }
+      }
+      fclose(file2);
+      free(line2);
+
+      if(strcmp(input,"end") == 0){
+        //exit(0);
+        loop--;
       }
 
-      fclose(userfile);
       free(input);
-      free(users);
 
     }
 
