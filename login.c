@@ -22,6 +22,7 @@ int main(int argc, char *argv[]){
   int step = 1;
   int users = numoflines("Usernames.txt");
   int usertxt = numoflines("User.txt");
+  int pass = numoflines("Private.txt");
 
   while(loop){
 
