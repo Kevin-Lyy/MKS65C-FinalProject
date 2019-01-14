@@ -17,4 +17,6 @@ server.o: server.c networking.h
 
 clean:
 	rm *.o
+	rm client
+	rm server
 	rm *~
