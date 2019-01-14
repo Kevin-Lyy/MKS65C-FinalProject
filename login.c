@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//Counts the number of lines in a given file
 int numoflines(char * file){
   int filelen = 0;
   char checkline[1000];
@@ -25,12 +26,14 @@ int main(int argc, char *argv[]){
 
   while(loop){
 
+    //Starts with step one, logging in username
     if(step == 1){
       char * input = (char*)malloc(100*sizeof(char));
       printf("Name?\n");
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
 
+      //Looks through Usernames.txt file for input
       char * line = (char*)malloc(100*sizeof(char));
       size_t len = 0;
       FILE *file;
@@ -42,29 +45,32 @@ int main(int argc, char *argv[]){
         if(strcmp(input,line) == 0){
           userid = i;
           step++;
-
         }
       }
       fclose(file);
       free(line);
 
-      //Creates a new user
+      //Creates a new user if input does not
+      //match anyone in the file
       if(userid == 0 && i == numoflines("Usernames.txt")){
         printf("Username does not exist \n");
         printf("Creating new user: %s \n",input);
+        //adds user to Usernames.txt
         userid = numoflines("Usernames.txt") + 1;
         file = fopen("Usernames.txt","a");
-        fprintf(file,"%s",input);
+        fprintf(file,"%s\n",input);
         fclose(file);
+        //adds user and wins/loss record to User.txt
         file = fopen("User.txt","a");
         fprintf(file,"%s\n0\n0\n",input);
         step++;
+        fclose(file);
       }
-      fclose(file);
 
     }
 
-    //userid
+    //Step 2 is looking for input matching
+    //the users password
     if(step == 2){
       printf("\nPassword?\n");
       //printf("User ID: %i\n",userid);
@@ -77,11 +83,13 @@ int main(int argc, char *argv[]){
         inputpass[strlen(inputpass)-1] = '\0';
         FILE *filepass;
         filepass = fopen("Private.txt","a");
-        fprintf(filepass,"%s",inputpass);
-        fclose(filepass);
+        fprintf(filepass,"%s\n",inputpass);
         step++;
+        fclose(filepass);
       }
 
+      //Looks through file, finds the line that matches
+      //user and compares
       else{
         fgets(inputpass,100,stdin);
         inputpass[strlen(inputpass)-1] = '\0';
@@ -90,30 +98,26 @@ int main(int argc, char *argv[]){
         FILE *filepass;
         size_t len = 0;
         filepass = fopen("Private.txt","r");
-        int linenum = 0;
         int c = 0;
 
-        for(;c< users;c++){
+        for(;c < users;c++){
           getline(&pass,&len,filepass);
           strtok(pass, "\n");
-          if(linenum == userid){
+          if(c == userid){
             if(strcmp(inputpass,pass) == 0){
               step++;
+              printf("\nLogin success! \n \n");
             }
           }
-          else{
-            linenum++;
-          }
         }
-
         fclose(filepass);
         free(pass);
-        printf("\nLogin success! \n \n");
 
       }
     }
 
-
+    //Final step, lists out opponents and
+    //their win/loss record
     if(step == 3){
       printf("Pick an opponent:\n");
 
@@ -121,6 +125,7 @@ int main(int argc, char *argv[]){
       size_t len = 0;
       FILE *userfile;
       userfile = fopen("User.txt","r");
+
       int i = 0;
       for(;i< usertxt;i++){
         getline(&username,&len,userfile);
@@ -135,6 +140,7 @@ int main(int argc, char *argv[]){
       fclose(userfile);
       free(username);
 
+      //Input does not allow you to choose yourself
       char * input = (char*)malloc(100*sizeof(char));
       fgets(input,100,stdin);
       input[strlen(input)-1] = '\0';
@@ -158,17 +164,12 @@ int main(int argc, char *argv[]){
       free(line2);
 
       if(strcmp(input,"end") == 0){
-        //exit(0);
         loop--;
       }
 
       free(input);
 
     }
-
-    //User
-    //Wins
-    //Loss
 
 
   }
