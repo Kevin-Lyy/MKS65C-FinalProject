@@ -39,72 +39,52 @@ void subserver(int client_socket) {
     user = log_server(client_socket);
     printf("User [%s] connected\n", user);
 
-    //get opponent
-    opponent = select_match(user, client_socket);
+    int choice;
+    read(client_socket, &choice, sizeof(int));
+    printf("CHOICE: %i\n", choice);
+
     int player;
-    printf("Opponent of [%s] is [%s]\n", user, opponent);
-    if(!strcmp(opponent, "-1") == 0){
-        printf("1, %s will be choosing opponent\n", user);
-        //write(server_socket, opponent, sizeof(opponent));
-        player = 1;
-        const char * pipe = (const char *)opponent;
-        perror("const char opp");
-        int fd = open(pipe, O_WRONLY);
-        perror("open write");
-        write(fd, user, sizeof(user));
-        perror("write");
+    //get opponent
+    if (choice){
+        opponent = select_match(user, client_socket);
+        printf("Opponent of [%s] is [%s]\n", user, opponent);
+        if(strcmp(opponent, "-1") != 0){
+            printf("1, %s will be choosing opponent\n", user);
+            //write(server_socket, opponent, sizeof(opponent));
+            player = 1;
+            const char * pipe = (const char *)opponent;
+            perror("const char opp");
+            int fd = open(pipe, O_WRONLY);
+            perror("open write");
+            write(fd, user, sizeof(user));
+            perror("write");
+        } else {
+            printf("no opponents avail\n");
+            player = 0;
+            const char * pipe = (const char *)user;
+            perror("const char user");
+            mkfifo(pipe, 0655);
+            perror("make");
+            int fd = open(pipe, O_RDONLY);
+            perror("open");
+
+            read(fd, opponent, BUFFER_SIZE);
+            perror("read");
+
+        }
     } else {
-        printf("no opponents avail\n");
+        printf("0, %s will not be choosing opponent\n", user);
         player = 0;
         const char * pipe = (const char *)user;
         perror("const char user");
         mkfifo(pipe, 0655);
         perror("make");
-        int fd = open(pipe, O_RDONLY);
+        int fd = open(pipe, O_RDONLY );
         perror("open");
 
         read(fd, opponent, BUFFER_SIZE);
         perror("read");
     }
-    //if (choice){
-    //    printf("Opponent of [%s] is [%s]\n", user, opponent);
-    //    if(!strcmp(opponent, "-1") == 0){
-    //        printf("1, %s will be choosing opponent\n", user);
-    //        //write(server_socket, opponent, sizeof(opponent));
-    //        player = 1;
-    //        const char * pipe = (const char *)opponent;
-    //        perror("const char opp");
-    //        int fd = open(pipe, O_WRONLY);
-    //        perror("open write");
-    //        write(fd, user, sizeof(user));
-    //        perror("write");
-    //    } else {
-    //        printf("no opponents avail\n");
-    //        player = 0;
-    //        const char * pipe = (const char *)user;
-    //        perror("const char user");
-    //        mkfifo(pipe, 0655);
-    //        perror("make");
-    //        int fd = open(pipe, O_RDONLY);
-    //        perror("open");
-
-    //        read(fd, opponent, BUFFER_SIZE);
-    //        perror("read");
-
-    //    }
-    //} else {
-    //    printf("0, %s will not be choosing opponent\n", user);
-    //    player = 0;
-    //    const char * pipe = (const char *)user;
-    //    perror("const char user");
-    //    mkfifo(pipe, 0655);
-    //    perror("make");
-    //    int fd = open(pipe, O_RDONLY );
-    //    perror("open");
-
-    //    read(fd, opponent, BUFFER_SIZE);
-    //    perror("read");
-    //}
 
     printf("---------------------\n");
     printf("user [%s]\n", user);
@@ -210,24 +190,17 @@ char * select_match(char * user, int client_socket){
     size_t len = 0;
     int size = 0;
 
-    int choice;
-    read(client_socket, &choice, sizeof(int));
-    printf("CHOICE: %i\n", choice);
-    if (!choice ){
-        return "-1";
-    }
 
     char * userinfo = malloc(BUFFER_SIZE);
     while( getline(&line, &len, online) != -1){
         size++;
         //line[strcspn(line, "\n")] = 0;
         strcat(userinfo, strsep(&line, " "));
-        strcat(userinfo, "\n");
     }
     rewind(online);
 
     write(client_socket, userinfo, BUFFER_SIZE);
-    write(client_socket, &size, sizeof(int));
+    //write(client_socket, &size, sizeof(int));
 
     //get opponent
     read(client_socket, opponent, sizeof(opponent));
