@@ -44,6 +44,8 @@ void subserver(int client_socket) {
     printf("CHOICE: %i\n", choice);
 
     int player;
+    int fd;
+    const char * pipe;
     //get opponent
     if (choice){
         opponent = select_match(user, client_socket);
@@ -52,20 +54,21 @@ void subserver(int client_socket) {
             printf("1, %s will be choosing opponent\n", user);
             //write(server_socket, opponent, sizeof(opponent));
             player = 1;
-            const char * pipe = (const char *)opponent;
+            printf("[%s] is player %i\n", user, player);
+            pipe = (const char *)opponent;
             perror("const char opp");
-            int fd = open(pipe, O_WRONLY);
+            fd = open(pipe, O_WRONLY);
             perror("open write");
             write(fd, user, sizeof(user));
             perror("write");
         } else {
             printf("no opponents avail\n");
             player = 0;
-            const char * pipe = (const char *)user;
+            pipe = (const char *)user;
             perror("const char user");
             mkfifo(pipe, 0655);
             perror("make");
-            int fd = open(pipe, O_RDONLY);
+            fd = open(pipe, O_RDONLY);
             perror("open");
 
             read(fd, opponent, BUFFER_SIZE);
@@ -75,11 +78,11 @@ void subserver(int client_socket) {
     } else {
         printf("0, %s will not be choosing opponent\n", user);
         player = 0;
-        const char * pipe = (const char *)user;
+        pipe = (const char *)user;
         perror("const char user");
         mkfifo(pipe, 0655);
         perror("make");
-        int fd = open(pipe, O_RDONLY );
+        fd = open(pipe, O_RDONLY );
         perror("open");
 
         read(fd, opponent, BUFFER_SIZE);
@@ -88,8 +91,40 @@ void subserver(int client_socket) {
 
     printf("---------------------\n");
     printf("user [%s]\n", user);
+    printf("player# [%d]\n", player);
     printf("opponent [%s]\n", opponent);
     printf("---------------------\n");
+
+    // player0 use opponent as pipe, p1 use self as pipe
+    if (player == 0){
+        pipe = (const char*)opponent;
+    } else {
+        pipe = (const char*)user;
+    }
+    memset(buffer, 0, BUFFER_SIZE);
+    // use % 2 to take turns
+    int turn = 0;
+
+    char pstr[12];
+    sprintf(pstr, "%d", player);
+    printf("|%s| is player %i\n", user, player);
+    write(client_socket, pstr, sizeof(pstr));
+
+
+    //while (1){
+    //    if (turn % 2 == player){
+    //        //write
+    //        fd = open(pipe, O_WRONLY);
+    //    } else {
+    //        fd = open(pipe, O_RDONLY);
+    //    }
+    //}
+    
+
+
+
+
+
 
     //write(client_socket, &player, sizeof(player));
     //game(user, opponent, player, client_socket);
@@ -194,33 +229,15 @@ char * select_match(char * user, int client_socket){
     char * userinfo = malloc(BUFFER_SIZE);
     while( getline(&line, &len, online) != -1){
         size++;
-        //line[strcspn(line, "\n")] = 0;
         strcat(userinfo, strsep(&line, " "));
     }
     rewind(online);
 
     write(client_socket, userinfo, BUFFER_SIZE);
-    //write(client_socket, &size, sizeof(int));
 
     //get opponent
     read(client_socket, opponent, sizeof(opponent));
     printf("|%s| opponent is |%s|\n", user, opponent);
-
-    ////get amount of lines in file
-    //int size = 0;
-    //while( getline(&line, &len, online) != -1){
-    //    size++;
-    //}
-    //rewind(online);
-    //printf("size %i\n", size);
-
-    //printf("--------ONLINE USERS---------\n");
-    //while( getline(&line, &len, online) != -1){
-    //    printf("%s\n", line);
-    //}
-    //rewind(online);
-    //printf("-----------------------------\n");
-
 
     fclose(online);
     return opponent;
@@ -236,7 +253,6 @@ char * log_server(int client_socket){
     char * userinfo = malloc(BUFFER_SIZE);
     while( getline(&line, &len, logins) != -1){
         line_num++;
-        //line[strcspn(line, "\n")] = 0;
         strcat(userinfo, strsep(&line, " "));
         strcat(userinfo, "\n");
     }
@@ -246,7 +262,6 @@ char * log_server(int client_socket){
     // new user?
     int new;
     read(client_socket, &new, sizeof(int));
-    //printf("new = %d\n", new);
 
     // get username
     char * name = (char*)malloc(100*sizeof(char));
@@ -286,11 +301,3 @@ char * log_server(int client_socket){
 
     return name;
 }
-
-int init_game(char * opponent){
-    int connection = open(opponent, O_WRONLY);
-    printf("INIT GAME");
-
-    return connection;
-}
-

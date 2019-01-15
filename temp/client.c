@@ -19,7 +19,6 @@ int main(int argc, char **argv) {
 
     //get user
     char * user = login(server_socket);
-    //write(server_socket, user, sizeof(user));
 
     //choose action
     char * choice = calloc(3, 1);
@@ -34,19 +33,11 @@ int main(int argc, char **argv) {
     char * opponent = matching( user, server_socket );
     write(server_socket, opponent, sizeof(opponent));
     
-    //if (choice){
-    //    printf("1, will be choosing opponent\n");
-    //    char * opponent = select_match(user);
-    //    write(server_socket, opponent, sizeof(opponent));
-    //} else {
-    //    printf("0, will not be choosing opponent\n");
-    //    write(server_socket, "-1", sizeof("-1"));
-    //}
-
-
-    int player;
+    char pstr[12];
     int turn = 1;
-    read(server_socket, &player, sizeof(player));
+    read(server_socket, pstr, sizeof(pstr));
+    int player = atoi(pstr);
+    printf("|%s| is player %i\n", user, player);
 
     memset(buffer, 0, BUFFER_SIZE);
     //while(1){
@@ -77,26 +68,17 @@ char * matching( char * user, int server_socket ){
     char * userinfo = malloc(BUFFER_SIZE);
     char * opponent = (char*)malloc(100*sizeof(char));
 
-
     read(server_socket, userinfo, BUFFER_SIZE);
     printf("-----Users-----\n");
     printf("%s", userinfo);
     printf("---------------\n");
-
-    //int size;
-    //read(server_socket, &size, sizeof(int));
-    //printf("size: %i\n", size);
-    //if (size == 1){
-    //    printf("No opponents currently online, please wait for one\n");
-    //    return "-1";
-    //}
 
     int size = 0;
     while( strsep(&userinfo, "\n") ){
         size++;
     }
     printf("SIZE = %i\n", size);
-    if (size == 2){
+    if (size <= 2){
         printf("No opponents available, wait\n");
         return "-1";
     }
@@ -137,8 +119,6 @@ char * login(int server_socket){
 
     char * check_user = calloc(1, 20);
     while( check_user = strsep(&userinfo, "\n") ){
-        //check_user[strlen(check_user)-1] = '\0';
-        //printf("checkuser: |%s|\n", check_user);
         if (strcmp( name, check_user ) == 0){
             new = 0;
             printf("User exists\n");
