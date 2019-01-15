@@ -13,22 +13,15 @@ int main(int argc, char **argv) {
     char buffer[BUFFER_SIZE];
 
     if (argc == 2)
-        server_socket = client_setup( argv[1]);
+        server_socket = client_setup( argv[1], PORT);
     else
-        server_socket = client_setup( TEST_IP );
+        server_socket = client_setup( TEST_IP , PORT);
 
     //get user
     char * user = login(server_socket);
     //write(server_socket, user, sizeof(user));
 
     //choose action
-    char * choice = calloc(3, 1);
-    printf("Enter 0 to wait for game or 1 to connect to opponent: ");
-    fgets(choice,3,stdin);
-    choice[strlen(choice)-1] = '\0';
-    int a = atoi(choice);
-    printf("CHOICE = %d\n", a);
-    write(server_socket, &a, sizeof(int));
 
     //get opponent
     matching( user, server_socket );
@@ -43,19 +36,46 @@ int main(int argc, char **argv) {
     //}
 
 
-    while (1) {
-        printf("enter data: ");
-        fgets(buffer, sizeof(buffer), stdin);
-        *strchr(buffer, '\n') = 0;
-        write(server_socket, buffer, sizeof(buffer));
-        read(server_socket, buffer, sizeof(buffer));
-        printf("received: [%s]\n", buffer);
-    }
+    int player;
+    int turn = 1;
+    read(server_socket, &player, sizeof(player));
+
+    memset(buffer, 0, BUFFER_SIZE);
+    //while(1){
+    //    if (turn % 2 == player){
+    //        printf("Enter content: ");
+    //        fgets(buffer, BUFFER_SIZE, stdin);
+    //        buffer[strlen(buffer)-1] = '\0';
+    //        write(server_socket, buffer, BUFFER_SIZE);
+    //    } else {
+    //        read(server_socket, buffer, BUFFER_SIZE);
+    //        buffer[strlen(buffer)-1] = '\0';
+    //        printf("got %s\n", buffer);
+    //    }
+    //    turn++;
+    //    memset(buffer, 0, BUFFER_SIZE);
+    //}
+    //while (1) {
+    //    printf("enter data: ");
+    //    fgets(buffer, sizeof(buffer), stdin);
+    //    *strchr(buffer, '\n') = 0;
+    //    write(server_socket, buffer, sizeof(buffer));
+    //    read(server_socket, buffer, sizeof(buffer));
+    //    printf("received: [%s]\n", buffer);
+    //}
 }
 
 char * matching( char * user, int server_socket ){
     char * userinfo = malloc(BUFFER_SIZE);
     char * opponent = (char*)malloc(100*sizeof(char));
+
+    char * choice = calloc(3, 1);
+    printf("Enter 0 to wait for game or 1 to connect to opponent: ");
+    fgets(choice,3,stdin);
+    choice[strlen(choice)-1] = '\0';
+    int a = atoi(choice);
+    printf("CHOICE = %d\n", a);
+    write(server_socket, &a, sizeof(int));
 
     read(server_socket, userinfo, BUFFER_SIZE);
     printf("-----Users-----\n");
@@ -80,7 +100,7 @@ char * matching( char * user, int server_socket ){
         printf("cant enter yourself\n");
         printf("Enter opponent: ");
         fgets(opponent,100,stdin);
-        //opponent[strlen(opponent)-1] = '\0';
+        opponent[strlen(opponent)-1] = '\0';
         printf("opp: %s\n", opponent);
     }
 
