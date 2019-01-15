@@ -16,3 +16,9 @@ Fixed loop, login complete, it takes a username, password, displays other uses b
 Added comments in Tic Tac Toe for partner <br />
 
 Jack <br />
+1/13/19  
+Added user login and selecting opponent functionality for network
+
+1/14/19
+Implemented communication between two clients, alternating in turns. <br>
+Failed to integrate tic tac toe game into the client-server network.
