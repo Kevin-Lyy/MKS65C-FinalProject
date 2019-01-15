@@ -22,9 +22,17 @@ int main(int argc, char **argv) {
     //write(server_socket, user, sizeof(user));
 
     //choose action
+    char * choice = calloc(3, 1);
+    printf("Enter 0 to wait for game or 1 to connect to opponent: ");
+    fgets(choice,3,stdin);
+    choice[strlen(choice)-1] = '\0';
+    int a = atoi(choice);
+    printf("CHOICE = %d\n", a);
+    write(server_socket, &a, sizeof(int));
 
     //get opponent
-    matching( user, server_socket );
+    char * opponent = matching( user, server_socket );
+    write(server_socket, opponent, sizeof(opponent));
     
     //if (choice){
     //    printf("1, will be choosing opponent\n");
@@ -69,26 +77,29 @@ char * matching( char * user, int server_socket ){
     char * userinfo = malloc(BUFFER_SIZE);
     char * opponent = (char*)malloc(100*sizeof(char));
 
-    char * choice = calloc(3, 1);
-    printf("Enter 0 to wait for game or 1 to connect to opponent: ");
-    fgets(choice,3,stdin);
-    choice[strlen(choice)-1] = '\0';
-    int a = atoi(choice);
-    printf("CHOICE = %d\n", a);
-    write(server_socket, &a, sizeof(int));
 
     read(server_socket, userinfo, BUFFER_SIZE);
     printf("-----Users-----\n");
     printf("%s", userinfo);
     printf("---------------\n");
 
-    int size;
-    read(server_socket, &size, sizeof(int));
-    if (size == 1){
-        printf("No opponents currently online, please wait for one\n");
+    //int size;
+    //read(server_socket, &size, sizeof(int));
+    //printf("size: %i\n", size);
+    //if (size == 1){
+    //    printf("No opponents currently online, please wait for one\n");
+    //    return "-1";
+    //}
+
+    int size = 0;
+    while( strsep(&userinfo, "\n") ){
+        size++;
+    }
+    printf("SIZE = %i\n", size);
+    if (size == 2){
+        printf("No opponents available, wait\n");
         return "-1";
     }
-
     fflush(stdin);
     printf("Enter opponent: ");
     fgets(opponent,100,stdin);
@@ -105,9 +116,7 @@ char * matching( char * user, int server_socket ){
     }
 
     printf("|%s| opponent: |%s|\n", user, opponent);
-    write(server_socket, opponent, sizeof(opponent));
-    free(opponent);
-    return "";
+    return opponent;
 }
 
 
