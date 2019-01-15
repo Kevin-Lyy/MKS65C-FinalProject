@@ -2,7 +2,7 @@
 ## Tic tac toe on a server
 ## Group 73 - Jack Lu, Kevin Ly
 It is a game of tic tac toe played on a server, you login and are given a list of opponents to pick from to challenge
-##DEVLOG
+## DEVLOG
 Kevin <br />
 1/7/19 <br />
 I coded Tic tac toe, both players play on the same terminal, all ways of winning worked, players could tie and could not place their piece on a taken spot <br />
