@@ -121,7 +121,7 @@ void printboard(char * board){
 }
 
 
-int main(int argc, char *argv[]){
+int main(){
   //for the while loop
   int winner = 1;
   //for the input
