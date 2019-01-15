@@ -16,7 +16,7 @@ and sets it to the listening state
 
 returns the socket descriptor
 =========================*/
-int server_setup() {
+int server_setup(char * port) {
     int sd, i;
 
     //create the socket
