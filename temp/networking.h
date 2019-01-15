@@ -16,17 +16,13 @@
 #define NETWORKING_H
 
 #define BUFFER_SIZE 256
-#define PORT "9002"
+#define PORT "9001"
 #define TEST_IP "127.0.0.1"
 
 void error_check(int i, char *s);
 int server_setup();
 int server_connect(int sd);
 int client_setup(char * server);
-/* if Login exists, login
- * else creates new username
- */
-char * login();
 // select opponent from currently online users
 char * select_match(char * user);
 /* Opens read end of pipe in subserver for other subserver to connect to
