@@ -34,33 +34,37 @@ int main(int argc, char **argv) {
     write(server_socket, opponent, sizeof(opponent));
     
     char pstr[12];
-    int turn = 1;
+    int turn = 0;
     read(server_socket, pstr, sizeof(pstr));
     int player = atoi(pstr);
     printf("|%s| is player %i\n", user, player);
 
     memset(buffer, 0, BUFFER_SIZE);
-    //while(1){
-    //    if (turn % 2 == player){
-    //        printf("Enter content: ");
-    //        fgets(buffer, BUFFER_SIZE, stdin);
-    //        buffer[strlen(buffer)-1] = '\0';
-    //        write(server_socket, buffer, BUFFER_SIZE);
-    //    } else {
-    //        read(server_socket, buffer, BUFFER_SIZE);
-    //        buffer[strlen(buffer)-1] = '\0';
-    //        printf("got %s\n", buffer);
-    //    }
-    //    turn++;
-    //    memset(buffer, 0, BUFFER_SIZE);
-    //}
+    while(1){
+        if (turn % 2 == player){
+            //write to server
+            printf("Enter content: ");
+            fgets(buffer, BUFFER_SIZE, stdin);
+            //buffer[strlen(buffer)-1] = '\0';
+            write(server_socket, buffer, BUFFER_SIZE);
+        } else {
+            // read frmo server
+            read(server_socket, buffer, BUFFER_SIZE);
+            //buffer[strlen(buffer)-1] = '\0';
+            printf("got %s\n", buffer);
+        }
+        turn++;
+        memset(buffer, 0, BUFFER_SIZE);
+    }
     //while (1) {
-    //    printf("enter data: ");
-    //    fgets(buffer, sizeof(buffer), stdin);
-    //    *strchr(buffer, '\n') = 0;
-    //    write(server_socket, buffer, sizeof(buffer));
-    //    read(server_socket, buffer, sizeof(buffer));
-    //    printf("received: [%s]\n", buffer);
+    //    read(server_socket, buffer, BUFFER_SIZE);
+    //    printf("%s\n", buffer);
+    //    //fgets(buffer, sizeof(buffer), stdin);
+    //    //*strchr(buffer, '\n') = 0;
+    //    //write(server_socket, buffer, sizeof(buffer));
+    //    //read(server_socket, buffer, sizeof(buffer));
+    //    //printf("received: [%s]\n", buffer);
+    //    memset(buffer, 0, BUFFER_SIZE);
     //}
 }
 

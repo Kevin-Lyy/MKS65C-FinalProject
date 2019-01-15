@@ -47,13 +47,15 @@ void subserver(int client_socket) {
     int fd;
     const char * pipe;
     //get opponent
+    opponent = select_match(user, client_socket);
     if (choice){
-        opponent = select_match(user, client_socket);
         printf("Opponent of [%s] is [%s]\n", user, opponent);
         if(strcmp(opponent, "-1") != 0){
             printf("1, %s will be choosing opponent\n", user);
             //write(server_socket, opponent, sizeof(opponent));
             player = 1;
+            pipe = (const char *)user;
+            mkfifo(pipe, 0655);
             printf("[%s] is player %i\n", user, player);
             pipe = (const char *)opponent;
             perror("const char opp");
@@ -82,7 +84,7 @@ void subserver(int client_socket) {
         perror("const char user");
         mkfifo(pipe, 0655);
         perror("make");
-        fd = open(pipe, O_RDONLY );
+        fd = open(pipe, O_RDONLY);
         perror("open");
 
         read(fd, opponent, BUFFER_SIZE);
@@ -98,8 +100,10 @@ void subserver(int client_socket) {
     // player0 use opponent as pipe, p1 use self as pipe
     if (player == 0){
         pipe = (const char*)opponent;
+        printf("p0 pipe = [%s]\n", pipe);
     } else {
         pipe = (const char*)user;
+        printf("p1 pipe = [%s]\n", pipe);
     }
     memset(buffer, 0, BUFFER_SIZE);
     // use % 2 to take turns
@@ -107,19 +111,34 @@ void subserver(int client_socket) {
 
     char pstr[12];
     sprintf(pstr, "%d", player);
-    printf("|%s| is player %i\n", user, player);
     write(client_socket, pstr, sizeof(pstr));
+    printf("[%s] [%i]\n", user, player);
 
+    memset(buffer, 0, BUFFER_SIZE);
 
-    //while (1){
-    //    if (turn % 2 == player){
-    //        //write
-    //        fd = open(pipe, O_WRONLY);
-    //    } else {
-    //        fd = open(pipe, O_RDONLY);
-    //    }
-    //}
-    
+    printf("%s %i\n", user, player);
+    while (1){
+        if (turn % 2 == player){
+            //read from client
+            read(client_socket, buffer, BUFFER_SIZE);
+            printf("[got data]\n");
+            //write to opponent
+            fd = open(pipe, O_WRONLY | O_CREAT);
+            write(fd, buffer, BUFFER_SIZE);
+            close(fd);
+
+        } else {
+            //read from opponent
+            fd = open(pipe, O_RDONLY | O_CREAT);
+            read(fd, buffer, BUFFER_SIZE);
+            close(fd);
+            //write to client
+            write(client_socket, buffer, BUFFER_SIZE);
+        }
+        turn++;
+        memset(buffer, 0, BUFFER_SIZE);
+    }
+
 
 
 
