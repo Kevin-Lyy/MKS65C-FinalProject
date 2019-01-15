@@ -19,14 +19,11 @@
 #define PORT "9002"
 #define TEST_IP "127.0.0.1"
 
+
 void error_check(int i, char *s);
 int server_setup();
 int server_connect(int sd);
 int client_setup(char * server);
-/* Connect to pipe of opponent
- * return fd of pipe
- */
-int init_game(char * opponent);
 
 
 

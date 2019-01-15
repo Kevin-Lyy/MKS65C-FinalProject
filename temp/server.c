@@ -1,6 +1,5 @@
 #include "networking.h"
 
-
 void process(char *s);
 void subserver(int from_client);
 // login
@@ -10,7 +9,7 @@ char * select_match(char * user, int client_socket);
 
 void sighandler(int s){
     printf("disconnecting all users...\n");
-    fclose( fopen("./online.txt", "w") );
+    fclose(fopen("./online.txt", "w"));
     exit(0);
 }
 
@@ -37,55 +36,51 @@ void subserver(int client_socket) {
 
     //get username
     user = log_server(client_socket);
-    printf("USER |%s| DDDDDDDDDD\n", user);
+    printf("User [%s] connected\n", user);
     int choice;
     read(client_socket, &choice, sizeof(int));
     printf("CHOICE: %i\n", choice);
 
     //get opponent
     if (choice){
-        printf("1, %s will be choosing opponent\n", user);
         opponent = select_match(user, client_socket);
-        //write(server_socket, opponent, sizeof(opponent));
+        printf("Opponent of [%s] is [%s]\n", user, opponent);
+        if(!strcmp(opponent, "-1") == 0){
+            printf("1, %s will be choosing opponent\n", user);
+            //write(server_socket, opponent, sizeof(opponent));
+            int player = 1;
+            const char * pipe = (const char *)opponent;
+            perror("const char opp");
+            int fd = open(pipe, O_WRONLY);
+            perror("open write");
+            write(fd, "messaggggggggggg", BUFFER_SIZE);
+            perror("write");
+        }
     } else {
         printf("0, %s will not be choosing opponent\n", user);
-        char * pipe = calloc(1, 100);
-        strcpy(pipe, user);
-        printf("USER %s\n", user);
-        printf("PIPE %s\n", pipe);
-        mkfifo(pipe, 0);
+        int player = 1;
+        const char * pipe = (const char *)user;
+        perror("const char user");
+        mkfifo(pipe, 0655);
+        perror("make");
         int fd = open(pipe, O_RDONLY);
-        //write(server_socket, "-1", sizeof("-1"));
+        perror("open");
+
+        read(fd, buffer, BUFFER_SIZE);
+        perror("read");
+        printf("buffer %s\n", buffer);
     }
-    printf("DONT GET TO HERE PLS\n");
 
-    //char * hold = malloc(100);
-    //fgets(hold, 100, stdin);
+    printf("---------------------\n");
+    printf("pipe %s\n", (char *)pipe);
+    printf("user %s\n", user);
+    printf("opponent %s\n", opponent);
+    printf("---------------------\n");
 
-    //get opponent
-    //read(client_socket, opponent, sizeof(opponent));
-    //printf("SERVER OPPONENT: |%s|\n", opponent);
-    //if (strcmp(opponent, "-1") == 0){
-    //    // no other user connected or choose to wait for game
-    //    printf(" NO choosing\n");
-    //    mkfifo(user, 0655);
-    //    int fd = open(user, O_RDONLY)
-    //    //while(1){
-    //    //    read(fd, buffer, BUFFER_SIZE);
-    //    //    printf("buffer: %s\n", buffer);
-    //    //}
-    //} else{
-    //    //open write end of pipe, connect to other subserver
-    //    printf(" yes choosing\n");
-    //    int fd = open(opponent, O_WRONLY);
-    //    //int game = init_game(opponent);
-    //    //while(1){
-    //    //    
-    //    //    fgets(buffer, sizeof(buffer), stdin);
-    //    //    *strchr(buffer, '\n') = 0;
-    //    //    write(fd, buffer, BUFFER_SIZE);
-    //    //    memset(buffer, 0, BUFFER_SIZE);
-    //    //}
+    //if (strcmp(pipe, (const char *)user) == 0){
+    //    printf("I AM ODD\n");
+    //} else {
+    //    printf("I AM EVEN\n");
     //}
 
 
@@ -100,7 +95,6 @@ void subserver(int client_socket) {
     //select_match(user);
 
 
-    remove((const char *)pipe);
     //fclose(fopen("./online.txt", "w"));
     close(client_socket);
     exit(0);
@@ -174,6 +168,7 @@ char * log_server(int client_socket){
 
     // get username
     char * name = (char*)malloc(100*sizeof(char));
+    name[strcspn(name, "\n")] = 0;
     read(client_socket, name, sizeof(name));
     //printf("name = |%s|\n", name);
 
@@ -201,7 +196,6 @@ char * log_server(int client_socket){
         write(client_socket, check, sizeof(check));
         //wait for login success
         int e = read(client_socket, 0, 0);
-        perror("e ");
     }
 
     FILE * online = fopen("./online.txt", "a+");

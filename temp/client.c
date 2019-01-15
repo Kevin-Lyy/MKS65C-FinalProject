@@ -22,10 +22,10 @@ int main(int argc, char **argv) {
     //write(server_socket, user, sizeof(user));
 
     //choose action
-    char * choice = calloc(2, 1);
+    char * choice = calloc(3, 1);
     printf("Enter 0 to wait for game or 1 to connect to opponent: ");
-    fgets(choice,2,stdin);
-    //choice[strlen(choice)-1] = '\0';
+    fgets(choice,3,stdin);
+    choice[strlen(choice)-1] = '\0';
     int a = atoi(choice);
     printf("CHOICE = %d\n", a);
     write(server_socket, &a, sizeof(int));
@@ -42,8 +42,6 @@ int main(int argc, char **argv) {
     //    write(server_socket, "-1", sizeof("-1"));
     //}
 
-    char * hold = malloc(100);
-    fgets(hold, 100, stdin);
 
     while (1) {
         printf("enter data: ");
@@ -71,6 +69,7 @@ char * matching( char * user, int server_socket ){
         return "-1";
     }
 
+    fflush(stdin);
     printf("Enter opponent: ");
     fgets(opponent,100,stdin);
     opponent[strlen(opponent)-1] = '\0';
@@ -81,12 +80,13 @@ char * matching( char * user, int server_socket ){
         printf("cant enter yourself\n");
         printf("Enter opponent: ");
         fgets(opponent,100,stdin);
-        opponent[strlen(opponent)-1] = '\0';
+        //opponent[strlen(opponent)-1] = '\0';
         printf("opp: %s\n", opponent);
     }
 
     printf("|%s| opponent: |%s|\n", user, opponent);
     write(server_socket, opponent, sizeof(opponent));
+    free(opponent);
     return "";
 }
 
