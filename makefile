@@ -1,24 +1,22 @@
-all: tic login
+all: client server
 
-tic: tic.o
-	gcc -o tic tic.o
+client: client.o networking.o
+	gcc -o client client.o networking.o
 
-login: login.o
-	gcc -o login login.o
+server: server.o networking.o
+	gcc -o server server.o networking.o
 
-tic.o: tic.c
-	gcc -c tic.c
+client.o: client.c networking.h
+	gcc -c client.c
 
-login.o: login.c
-	gcc -c login.c
+networking.o: networking.c networking.h
+	gcc -c networking.c
 
-run:
-	./tic
-
-fun:
-	./login
+server.o: server.c networking.h
+	gcc -c server.c
 
 clean:
 	rm *.o
-	rm tic
-	rm login
+	rm client
+	rm server
+	rm *~
