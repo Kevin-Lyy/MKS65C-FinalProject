@@ -4,11 +4,12 @@
 It is a game of tic tac toe played on a server, you login and are given a list of opponents to pick from to challenge
 
 ## Instructions to run 
-open 3 terminals <br />
-make <br />
-./server <br />
-./client <br />
-./client <br />
+Open 3 terminals <br />
+Compile with make <br />
+run ./server <br />
+run ./client for player 1 <br />
+run ./client for player 2 <br />
+Login or create a new account <br />
 
 ## DEVLOG
 Kevin <br />
