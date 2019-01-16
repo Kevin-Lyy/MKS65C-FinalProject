@@ -1,7 +1,10 @@
 # MKS65C-FinalProject
 ## Tic tac toe on a server
 ## Group 73 - Jack Lu, Kevin Ly
-It is a game of tic tac toe played on a server, you login and are given a list of opponents to pick from to challenge
+
+It is a game of tic tac toe played on a server, you login or create a new account and are given a list of active opponents to pick from to challenge. 
+
+The game plays like regular tic tac toe.
 
 ## Instructions to run 
 Open 3 terminals <br />
