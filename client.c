@@ -42,7 +42,9 @@ int main(int argc, char **argv) {
     int turn = 0;
     read(server_socket, pstr, sizeof(pstr));
     int player = atoi(pstr);
+    printf("============================\n");
     printf("|%s| is player %i\n", user, player);
+    printf("[%s] vs [%s]\n", user, opponent);
 
     char board[9];
     int c = 0;
