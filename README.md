@@ -37,3 +37,6 @@ Failed to integrate tic tac toe game into the client-server network.
 
 1/15/19 <br />
 Integrated tic tac toe game into client-server network
+
+## Bugs 
+After 2 players win and disconnect the server does not remove them from the online.txt file
