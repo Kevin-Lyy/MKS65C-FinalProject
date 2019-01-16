@@ -19,6 +19,9 @@ Jack <br />
 1/13/19  
 Added user login and selecting opponent functionality for network
 
-1/14/19
+1/14/19 <br />
 Implemented communication between two clients, alternating in turns. <br>
 Failed to integrate tic tac toe game into the client-server network.
+
+1/15/19 <br />
+Integrated tic tac toe game into client-server network
