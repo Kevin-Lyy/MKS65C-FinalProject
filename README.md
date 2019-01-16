@@ -10,8 +10,8 @@ The game plays like regular tic tac toe.
 Open 3 terminals <br />
 Compile with make <br />
 run ./server <br />
-run ./client for player 1 <br />
-run ./client for player 2 <br />
+run ./client followed by the server's IP address if connecting across a network for player 1 <br />
+run ./client followed by the server's IP address if connecting across a network for player 2 <br />
 Login or create a new account <br />
 
 ## DEVLOG
