@@ -2,11 +2,11 @@
 ## Tic tac toe on a server
 ## Group 73 - Jack Lu, Kevin Ly
 
-It is a game of tic tac toe played on a server, you login or create a new account and are given a list of active opponents to pick from to challenge. 
+It is a game of tic tac toe played on a server, you login or create a new account and are given a list of active opponents to pick from to challenge.
 
 The game plays like regular tic tac toe.
 
-## Instructions to run 
+## Instructions to run
 Open 3 terminals <br />
 Compile with make <br />
 run ./server <br />
@@ -38,5 +38,6 @@ Failed to integrate tic tac toe game into the client-server network.
 1/15/19 <br />
 Integrated tic tac toe game into client-server network
 
-## Bugs 
+## Bugs
 After 2 players win and disconnect the server does not remove them from the online.txt file
+Selecting a player that has disconnected will result in an error.
